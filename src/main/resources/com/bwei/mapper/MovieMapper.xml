@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bwei.dao.MovieDao">
+
+	<select id="findAll" parameterType="com.bwei.beans.SortUtil" resultType="com.bwei.beans.Movie">
+		select * from movie where 1 = 1
+		<if test="name != null and name != ''">
+			and name like concat("%",#{name},"%")
+		</if>
+		<if test="author != null and author != ''">
+			and name like concat("%",#{author},"%")
+		</if>
+		<if test="year != null and year != ''">
+			and year = #{year}
+		</if>
+		
+		<if test="(startdate != null and startdate != '') and (enddate != null and enddate != '')">
+			and datetime between #{startdate} and #{enddate}
+		</if>
+		
+		<if test="(minprice != null and minprice != '') and (maxprice != null and maxprice != '')">
+			and price between #{minprice} and #{maxprice}
+		</if>
+		
+		<if test="(mintime != null and mintime != '') and (maxtime != null and maxtime != '')">
+			and time between #{mintime} and #{maxtime}
+		</if>
+		
+		<if test="sort != null and sort != ''">
+			order by ${sort}
+		</if>
+		
+	</select>
+	
+	<delete id="delete" parameterType="string">
+		delete from movie where id in (${_parameter})
+	</delete>
+
+	<update id="upd" parameterType="map">
+		update movie set note = #{note} where id = #{id}
+	</update>
+</mapper>
